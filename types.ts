@@ -16,6 +16,7 @@ export interface MarketData {
   volume24h: number;
   high24h: number;
   low24h: number;
+  fundingRate: number; // New field for Futures Funding Rate
   lastUpdated: string;
 }
 

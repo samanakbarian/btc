@@ -1,8 +1,6 @@
-
 import React from 'react';
 import { MarketData, Currency } from '../types';
-// Import Wallet icon which was missing and causing a ReferenceError
-import { TrendingUp, TrendingDown, Activity, DollarSign, Wallet } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, Wallet, Percent } from 'lucide-react';
 
 interface PriceDisplayProps {
   data: MarketData | null;
@@ -31,8 +29,9 @@ const formatCompact = (val: number, curr: Currency) => {
 export const PriceDisplay: React.FC<PriceDisplayProps> = ({ data, currency, isLoading }) => {
   if (isLoading || !data) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
-        {[1, 2, 3, 4].map(i => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 animate-pulse">
+        <div className="col-span-1 md:col-span-2 h-32 bg-slate-200 dark:bg-slate-800 rounded-xl" />
+        {[1, 2, 3].map(i => (
           <div key={i} className="h-32 bg-slate-200 dark:bg-slate-800 rounded-xl" />
         ))}
       </div>
@@ -40,9 +39,10 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({ data, currency, isLo
   }
 
   const isPositive = data.priceChange24h >= 0;
+  const isFundingPositive = data.fundingRate >= 0;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
       {/* Main Price Card */}
       <div className="col-span-1 md:col-span-2 bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-10">
@@ -86,6 +86,23 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({ data, currency, isLo
         </span>
         <div className="w-full bg-slate-100 dark:bg-slate-700 h-1.5 mt-3 rounded-full overflow-hidden">
           <div className="bg-purple-500 h-full rounded-full" style={{ width: '40%' }}></div>
+        </div>
+      </div>
+
+      {/* Funding Rate */}
+      <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-center">
+         <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Terminsränta</h3>
+          <Percent className="w-4 h-4 text-orange-500" />
+        </div>
+        <span className={`text-2xl font-bold ${isFundingPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
+          {(data.fundingRate * 100).toFixed(4)}%
+        </span>
+        <div className="flex items-center justify-between mt-3">
+           <span className="text-xs text-slate-400 font-medium">8t period</span>
+           <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${isFundingPositive ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400'}`}>
+             {isFundingPositive ? 'Bullish' : 'Bearish'}
+           </span>
         </div>
       </div>
     </div>
