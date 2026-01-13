@@ -1,6 +1,6 @@
 import React from 'react';
 import { MarketData, Currency } from '../types';
-import { TrendingUp, TrendingDown, Activity, Wallet, Percent } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, Wallet, Percent, Info } from 'lucide-react';
 
 interface PriceDisplayProps {
   data: MarketData | null;
@@ -90,9 +90,22 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({ data, currency, isLo
       </div>
 
       {/* Funding Rate */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-center">
+      <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-center relative group/card">
          <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Terminsränta</h3>
+          <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            Terminsränta
+            <div className="relative group/info">
+              <Info className="w-3.5 h-3.5 text-slate-400 cursor-help hover:text-slate-600 dark:hover:text-slate-200" />
+              {/* Tooltip */}
+              <div className="absolute right-0 top-6 w-60 p-3 bg-slate-900 text-slate-100 text-[11px] rounded-lg shadow-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-50 border border-slate-700 font-normal leading-relaxed">
+                <p className="mb-2"><strong>Funding Rate</strong> balanserar priset på terminskontrakt mot spotpriset.</p>
+                <ul className="list-disc pl-3 space-y-1">
+                  <li><span className="text-emerald-400 font-bold">Positiv:</span> Longs betalar Shorts. Signalerar optimism (Bullish).</li>
+                  <li><span className="text-rose-400 font-bold">Negativ:</span> Shorts betalar Longs. Signalerar pessimism (Bearish).</li>
+                </ul>
+              </div>
+            </div>
+          </h3>
           <Percent className="w-4 h-4 text-orange-500" />
         </div>
         <span className={`text-2xl font-bold ${isFundingPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
