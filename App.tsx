@@ -169,7 +169,7 @@ const App: React.FC = () => {
 
       <footer className="border-t border-slate-200 dark:border-slate-800 py-6 mt-auto bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 text-center text-slate-500 dark:text-slate-400 text-sm">
-          <p>© {new Date().getFullYear()} SatoshiStation. Data från CoinGecko, Coinbase & Mempool.space.</p>
+          <p>© {new Date().getFullYear()} Rinse and Repeat Analytics. Data från CoinGecko, Coinbase & Mempool.space.</p>
           <p className="mt-2 text-xs opacity-60">Viktigt: Krypto-tillgångar deklareras som övriga tillgångar hos Skatteverket (30% skatt på vinst). Denna sida är ej finansiell rådgivning.</p>
         </div>
       </footer>

@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Bitcoin className="text-white w-6 h-6" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Satoshi<span className="text-bitcoin">Station</span>
+            Rinse and Repeat <span className="text-bitcoin">Analytics</span>
           </h1>
         </div>
 
