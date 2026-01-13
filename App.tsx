@@ -7,6 +7,7 @@ import { MarketChart } from './components/MarketChart';
 import { NetworkHealth } from './components/NetworkHealth';
 import { NewsFeed } from './components/NewsFeed';
 import { SwedishBitcoinTools } from './components/SwedishBitcoinTools';
+import { BottomNav } from './components/BottomNav';
 import { AlertTriangle, WifiOff } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -16,6 +17,9 @@ const App: React.FC = () => {
   const [timeframe, setTimeframe] = useState<string>('1'); 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Mobile Navigation State
+  const [activeTab, setActiveTab] = useState<string>('market');
 
   // Data State
   const [marketData, setMarketData] = useState<MarketData | null>(null);
@@ -112,9 +116,9 @@ const App: React.FC = () => {
           </div>
         </main>
       ) : (
-        <main className="flex-grow p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+        <main className="flex-grow p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full pb-24 md:pb-8">
           
-          {/* Show warning if using backup data (no chart data usually implies backup/partial data) */}
+          {/* Show warning if using backup data */}
           {marketData && chartData.length === 0 && (
             <div className="mb-6 p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg flex items-center text-sm text-orange-800 dark:text-orange-200">
               <AlertTriangle className="w-4 h-4 mr-2" />
@@ -122,52 +126,102 @@ const App: React.FC = () => {
             </div>
           )}
 
-          <PriceDisplay 
-            data={marketData} 
-            currency={currency} 
-            isLoading={!marketData && !error} 
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div className="lg:col-span-2">
-              <MarketChart 
+          {/* --- MOBILE VIEW (Tabs) --- */}
+          <div className="md:hidden space-y-6">
+            {activeTab === 'market' && (
+              <div className="animate-in fade-in duration-300 space-y-6">
+                <PriceDisplay 
+                  data={marketData} 
+                  currency={currency} 
+                  isLoading={!marketData && !error} 
+                />
+                <MarketChart 
                   data={chartData} 
                   currency={currency} 
                   theme={theme}
                   isPositive={marketData ? marketData.priceChange24h >= 0 : true}
                   timeframe={timeframe}
                   setTimeframe={setTimeframe}
-              />
-            </div>
-
-            <div className="lg:col-span-1 h-[350px]">
-              <NewsFeed news={news} />
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 px-1">Nätverk & Marknadshumör</h2>
-            {blockchainStats && fees && sentiment ? (
-               <NetworkHealth 
-                stats={blockchainStats} 
-                fees={fees} 
-                sentiment={sentiment} 
-              />
-            ) : (
-              <div className="p-8 text-center border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400">
-                Nätverksstatistik laddas eller är otillgänglig
+                />
+                <SwedishBitcoinTools currentPrice={marketData?.price || 0} />
               </div>
             )}
-           
+
+            {activeTab === 'network' && (
+               <div className="animate-in fade-in duration-300 space-y-6">
+                  <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200 px-1">Nätverk & Marknadshumör</h2>
+                  {blockchainStats && fees && sentiment ? (
+                    <NetworkHealth 
+                      stats={blockchainStats} 
+                      fees={fees} 
+                      sentiment={sentiment} 
+                    />
+                  ) : (
+                    <div className="p-8 text-center border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400">
+                      Laddar nätverksdata...
+                    </div>
+                  )}
+               </div>
+            )}
+
+            {activeTab === 'news' && (
+               <div className="animate-in fade-in duration-300 h-[calc(100vh-14rem)]">
+                 <NewsFeed news={news} />
+               </div>
+            )}
           </div>
 
-          <div className="mb-8">
-            <SwedishBitcoinTools currentPrice={marketData?.price || 0} />
+          {/* --- DESKTOP VIEW (Grid) --- */}
+          <div className="hidden md:block">
+            <PriceDisplay 
+              data={marketData} 
+              currency={currency} 
+              isLoading={!marketData && !error} 
+            />
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+              <div className="lg:col-span-2">
+                <MarketChart 
+                    data={chartData} 
+                    currency={currency} 
+                    theme={theme}
+                    isPositive={marketData ? marketData.priceChange24h >= 0 : true}
+                    timeframe={timeframe}
+                    setTimeframe={setTimeframe}
+                />
+              </div>
+
+              <div className="lg:col-span-1 h-[350px]">
+                <NewsFeed news={news} />
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 px-1">Nätverk & Marknadshumör</h2>
+              {blockchainStats && fees && sentiment ? (
+                 <NetworkHealth 
+                  stats={blockchainStats} 
+                  fees={fees} 
+                  sentiment={sentiment} 
+                />
+              ) : (
+                <div className="p-8 text-center border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400">
+                  Nätverksstatistik laddas eller är otillgänglig
+                </div>
+              )}
+            </div>
+
+            <div className="mb-8">
+              <SwedishBitcoinTools currentPrice={marketData?.price || 0} />
+            </div>
           </div>
+          
         </main>
       )}
 
-      <footer className="border-t border-slate-200 dark:border-slate-800 py-6 mt-auto bg-white dark:bg-slate-900">
+      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      <footer className="border-t border-slate-200 dark:border-slate-800 py-6 mt-auto bg-white dark:bg-slate-900 mb-16 md:mb-0">
         <div className="max-w-7xl mx-auto px-4 text-center text-slate-500 dark:text-slate-400 text-sm">
           <p>© {new Date().getFullYear()} Rinse and Repeat Analytics. Data från CoinGecko, Coinbase & Mempool.space.</p>
           <p className="mt-2 text-xs opacity-60">Viktigt: Krypto-tillgångar deklareras som övriga tillgångar hos Skatteverket (30% skatt på vinst). Denna sida är ej finansiell rådgivning.</p>
