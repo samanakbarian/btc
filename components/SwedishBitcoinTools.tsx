@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Calculator, TrendingUp, Landmark, Info, Wallet, PieChart, ArrowRightLeft, Coins } from 'lucide-react';
+import { Calculator, TrendingUp, Landmark, Info, Wallet, PieChart, ArrowRightLeft, Coins, FileText } from 'lucide-react';
 
 interface SwedishBitcoinToolsProps {
   currentPrice: number;
 }
 
-type Tab = 'dca' | 'isk' | 'converter';
+type Tab = 'dca' | 'isk' | 'converter' | 'whitepaper';
 
 export const SwedishBitcoinTools: React.FC<SwedishBitcoinToolsProps> = ({ currentPrice }) => {
   const [activeTab, setActiveTab] = useState<Tab>('dca');
@@ -98,27 +98,34 @@ export const SwedishBitcoinTools: React.FC<SwedishBitcoinToolsProps> = ({ curren
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
       {/* Tabs */}
-      <div className="flex border-b border-slate-200 dark:border-slate-700">
+      <div className="flex border-b border-slate-200 dark:border-slate-700 overflow-x-auto no-scrollbar">
         <button 
             onClick={() => setActiveTab('dca')}
-            className={`flex-1 py-4 text-sm font-semibold flex items-center justify-center space-x-2 transition-colors ${activeTab === 'dca' ? 'bg-slate-50 dark:bg-slate-700/50 text-bitcoin border-b-2 border-bitcoin' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
+            className={`flex-1 py-4 px-4 text-sm font-semibold flex items-center justify-center space-x-2 transition-colors min-w-[120px] whitespace-nowrap ${activeTab === 'dca' ? 'bg-slate-50 dark:bg-slate-700/50 text-bitcoin border-b-2 border-bitcoin' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
         >
             <Calculator className="w-4 h-4" />
             <span>Kalkylatorer</span>
         </button>
         <button 
             onClick={() => setActiveTab('isk')}
-            className={`flex-1 py-4 text-sm font-semibold flex items-center justify-center space-x-2 transition-colors ${activeTab === 'isk' ? 'bg-slate-50 dark:bg-slate-700/50 text-bitcoin border-b-2 border-bitcoin' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
+            className={`flex-1 py-4 px-4 text-sm font-semibold flex items-center justify-center space-x-2 transition-colors min-w-[120px] whitespace-nowrap ${activeTab === 'isk' ? 'bg-slate-50 dark:bg-slate-700/50 text-bitcoin border-b-2 border-bitcoin' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
         >
             <PieChart className="w-4 h-4" />
             <span>ISK vs Plånbok</span>
         </button>
         <button 
             onClick={() => setActiveTab('converter')}
-            className={`flex-1 py-4 text-sm font-semibold flex items-center justify-center space-x-2 transition-colors ${activeTab === 'converter' ? 'bg-slate-50 dark:bg-slate-700/50 text-bitcoin border-b-2 border-bitcoin' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
+            className={`flex-1 py-4 px-4 text-sm font-semibold flex items-center justify-center space-x-2 transition-colors min-w-[120px] whitespace-nowrap ${activeTab === 'converter' ? 'bg-slate-50 dark:bg-slate-700/50 text-bitcoin border-b-2 border-bitcoin' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
         >
             <ArrowRightLeft className="w-4 h-4" />
             <span>Omvandlare</span>
+        </button>
+        <button 
+            onClick={() => setActiveTab('whitepaper')}
+            className={`flex-1 py-4 px-4 text-sm font-semibold flex items-center justify-center space-x-2 transition-colors min-w-[120px] whitespace-nowrap ${activeTab === 'whitepaper' ? 'bg-slate-50 dark:bg-slate-700/50 text-bitcoin border-b-2 border-bitcoin' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
+        >
+            <FileText className="w-4 h-4" />
+            <span>Whitepaper</span>
         </button>
       </div>
 
@@ -304,6 +311,67 @@ export const SwedishBitcoinTools: React.FC<SwedishBitcoinToolsProps> = ({ curren
                             <span className="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center"><Coins className="w-3 h-3 mr-1"/> Satoshis</span>
                             <span className="text-lg font-mono font-bold text-slate-700 dark:text-slate-200">{Math.round(converted.sats).toLocaleString()}</span>
                          </div>
+                    </div>
+                </div>
+             </div>
+        )}
+
+        {/* --- TAB 4: Whitepaper --- */}
+        {activeTab === 'whitepaper' && (
+             <div className="animate-in fade-in duration-300">
+                <div className="flex flex-col md:flex-row gap-8 items-center">
+                    <div className="flex-1 space-y-4">
+                        <div>
+                             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Bitcoin: A Peer-to-Peer Electronic Cash System</h2>
+                             <p className="text-slate-500 dark:text-slate-400 font-medium">Publicerad av Satoshi Nakamoto, 31 Oktober 2008</p>
+                        </div>
+                        
+                        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                            Detta dokument på nio sidor lade grunden för världens första decentraliserade kryptovaluta. Det beskriver hur man löser problemet med "double-spending" utan att behöva lita på en central auktoritet (som en bank eller stat).
+                        </p>
+
+                         <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <h3 className="font-semibold text-slate-800 dark:text-white mb-2">Nyckelkoncept:</h3>
+                            <ul className="space-y-2">
+                                <li className="flex items-start">
+                                    <div className="bg-bitcoin/10 p-1 rounded mt-0.5 mr-2">
+                                        <Coins className="w-3 h-3 text-bitcoin" />
+                                    </div>
+                                    <span className="text-sm text-slate-600 dark:text-slate-300"><strong>Knappt utbud:</strong> Endast 21 miljoner bitcoins kommer någonsin att existera.</span>
+                                </li>
+                                <li className="flex items-start">
+                                     <div className="bg-bitcoin/10 p-1 rounded mt-0.5 mr-2">
+                                        <TrendingUp className="w-3 h-3 text-bitcoin" />
+                                    </div>
+                                    <span className="text-sm text-slate-600 dark:text-slate-300"><strong>Proof-of-Work:</strong> Använder energi för att säkra nätverket och göra historiken oändringsbar.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div className="pt-2">
+                            <a 
+                                href="https://bitcoin.org/bitcoin.pdf" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center px-6 py-3 bg-bitcoin hover:bg-orange-600 text-white font-bold rounded-lg transition-colors shadow-lg shadow-orange-500/20"
+                            >
+                                <FileText className="w-5 h-5 mr-2" />
+                                Läs Originalet (PDF)
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="w-full md:w-1/3 flex justify-center">
+                        <div className="relative group cursor-pointer" onClick={() => window.open('https://bitcoin.org/bitcoin.pdf', '_blank')}>
+                            <div className="absolute inset-0 bg-bitcoin blur-xl opacity-20 group-hover:opacity-30 transition-opacity rounded-xl"></div>
+                            <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-2 rounded-xl shadow-xl transform group-hover:-translate-y-1 transition-transform duration-300">
+                                <div className="aspect-[1/1.4] w-48 bg-slate-50 dark:bg-slate-800 rounded-lg flex flex-col items-center justify-center border border-slate-100 dark:border-slate-700/50">
+                                     <FileText className="w-16 h-16 text-slate-300 dark:text-slate-600 mb-2" />
+                                     <span className="text-[10px] font-mono text-slate-400">bitcoin.pdf</span>
+                                     <span className="text-[10px] font-mono text-slate-300 dark:text-slate-600 mt-1">184 KB</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
              </div>
